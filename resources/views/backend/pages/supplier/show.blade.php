@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>{{ $showData->name }} Information || </title>
+    <title>{{ $showData->name }} Information || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')

@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Manage Suppliers  || </title>
+    <title>Manage Suppliers  || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')

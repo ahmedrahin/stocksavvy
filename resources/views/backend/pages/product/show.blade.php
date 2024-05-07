@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>{{ $showData->name }} Information || </title>
+    <title>{{ $showData->name }} Information || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
@@ -28,9 +28,9 @@
             padding-right: 7px;
         }
         .productThum {
-            border-radius: 50%;
-            width: 100px;
-            height: 100px;
+            border-radius: 5%;
+            width: 220px;
+            height: 220px;
             display: block;
         }
     </style>

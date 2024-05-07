@@ -87,7 +87,6 @@
                                                     <td>{{$category->cat_name}}</td>
                                                     <td align="middle">
                                                         @php
-                                                            $counter++;
                                                             $switchId = 'switch' . $counter;
                                                         @endphp
                                                         @if($category->status == 0)
@@ -101,7 +100,10 @@
                                                 
                                                     <td class="action">
                                                         <button>
-                                                            <a href="{{route('show.supplier',$category->id)}}" target="_blank">
+                                                            @php
+                                                                $theCat = str_replace(' ', '_',  $category->cat_name)
+                                                            @endphp
+                                                            <a href="{{route('show.category',strtolower($theCat))}}" target="_blank">
                                                                 <i class="ri-eye-line"></i>
                                                             </a>
                                                         </button>

@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Manage Products  || </title>
+    <title>Manage Products  || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
@@ -132,7 +132,6 @@
                                                     </td>
                                                     <td align="middle">
                                                         @php
-                                                            $counter++;
                                                             $switchId = 'switch' . $counter;
                                                         @endphp
                                                         @if($product->status == 0)

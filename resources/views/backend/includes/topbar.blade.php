@@ -14,10 +14,22 @@
 
                 <a href="{{url('/')}}" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="{{asset('backend/images/logo-sm.png')}}" alt="logo-sm-light" height="22">
+                        <!--logo-->
+                        @php
+                            $logo = \App\Models\Settings::shop_logo();
+                        @endphp
+                        @if(!is_null($logo))
+                            <img src="{{asset($logo->logo)}}" alt="logo-light" height="20">
+                        @endif
                     </span>
                     <span class="logo-lg">
-                        <img src="{{asset('backend/images/logo-light.png')}}" alt="logo-light" height="20">
+                        <!--logo-->
+                        @php
+                            $logo = \App\Models\Settings::shop_logo();
+                        @endphp
+                        @if(!is_null($logo))
+                            <img src="{{asset($logo->logo)}}" alt="logo-light" height="20">
+                        @endif
                     </span>
                 </a>
             </div>
@@ -169,7 +181,7 @@
                     <!-- item-->
                     <a class="dropdown-item" href="#"><i class="ri-user-line align-middle me-1"></i> Profile</a>
                     <a class="dropdown-item" href="#"><i class="ri-wallet-2-line align-middle me-1"></i> My Wallet</a>
-                    <a class="dropdown-item d-block" href="#"><span class="badge bg-success float-end mt-1">11</span><i class="ri-settings-2-line align-middle me-1"></i> Settings</a>
+                    <a class="dropdown-item d-block" href="{{route('manage.settings')}}"><span class="badge bg-success float-end mt-1">11</span><i class="ri-settings-2-line align-middle me-1"></i> Settings</a>
                     <a class="dropdown-item" href="#"><i class="ri-lock-unlock-line align-middle me-1"></i> Lock screen</a>
                     <div class="dropdown-divider"></div>
                     <a class="dropdown-item text-danger" href="{{ route('logout') }}"

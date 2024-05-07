@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Manage Expenses || </title>
+    <title>Manage Expenses || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }} </title>
 @endsection
 
 @section('page-css')
@@ -8,6 +8,21 @@
     <style>
         td p {
             margin: 0 !important;
+        }
+        .card-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .btn-group {
+            padding: 0 !important;
+        }
+        a:focus {
+            box-shadow: none !important;
+        }
+        blockquote h4{
+            font-size: 13px;
+            font-weight: 700;
         }
     </style>
     <link href="{{asset('backend/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css')}}" rel="stylesheet" type="text/css" />
@@ -46,7 +61,15 @@
                     <div class="card">
                         <div class="card-body">
 
-                            <h4 class="card-title">Manage Expenses</h4>
+                            <h4 class="card-title">
+                                Manage Expenses
+                                <div class="btn btn-group">
+                                    <a href="{{route('manage.expenses')}}" class="btn btn-primary" style="background: #0c7dc2;">All</a>
+                                    <a href="{{route('today.expenses')}}" class="btn btn-primary" >Today</a>
+                                    <a href="{{route('month.expenses')}}" class="btn btn-primary">This Month</a>
+                                    <a href="{{route('year.expenses')}}" class="btn btn-primary">This Year</a>
+                                </div>
+                            </h4>
                             <div class="data">
                                 @if( $expenses->count() == 0 )
                                     <div class="alert alert-danger" role="alert">
@@ -60,6 +83,7 @@
                                                 <th>Expense Amount</th>
                                                 <th>Expense Month</th>
                                                 <th>Expense Date</th>
+                                                <th>Expense Year</th>
                                                 <th>Expense Details</th>
                                                 <th>Action</th>
                                             </tr>
@@ -90,15 +114,20 @@
                                                     <td>{{$expense->amn}}</td>
                                                     <td>{{$months[$expense->month]}}</td>
                                                     <td>{{$expense->date}}</td>
-                                                    <td>
-                                                        @php
-                                                            $details = $expense->details;
-                                                            echo $details;
-                                                        @endphp
+                                                    <td>{{$expense->year}}</td>
+                                                    <td style="text-wrap: wrap;width: 40%;">
+                                                        @if( !is_null($expense->details) )
+                                                            @php
+                                                                $details = $expense->details;
+                                                                echo $details;
+                                                            @endphp
+                                                        @else
+                                                            <div class="empty">No details found</div>
+                                                        @endif
                                                     </td>
                                                     <td class="action">
                                                         <button>
-                                                            <a href="{{route('edit.customer',$expense->id)}}">
+                                                            <a href="{{route('edit.expenses',$expense->id)}}">
                                                                 <i class="ri-edit-2-fill"></i>
                                                             </a>
                                                         </button>
@@ -115,6 +144,37 @@
                         </div>
                     </div>
                 </div> <!-- end col -->
+            </div>
+
+            <div class="row exp_info">
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            All Expenses Cost
+                        </div>
+                        <div class="card-body">
+                            <blockquote class="card-blockquote mb-0">
+                                <h4>Total Expenses:
+                                    <span class="text-danger" style="float: right;">
+                                        @php
+                                            $totalExpense = $expenses->count();
+                                            echo $totalExpense;
+                                        @endphp
+                                    </span>
+                                </h4>
+                                <hr>
+                                <h4>Total Expenses Amount:
+                                    <span class="text-danger" style="float: right;">
+                                        @php
+                                            $expensesCost = $expenses->sum('amn');
+                                            echo $expensesCost . "tk";
+                                        @endphp
+                                    </span>
+                                </h4>
+                            </blockquote>
+                        </div>
+                    </div>
+                </div>
             </div>
             
         </div> 
@@ -157,7 +217,7 @@
                                 deleteButton.closest('tr').fadeOut('slow', function() {
                                     $(this).remove();
                                 });
-
+                                // $('.exp_info').html(response.html)
                                 setTimeout(() => {
                                     Swal.fire('Deleted!', 'Expense has been deleted.', 'success');
                                 }, 1000);

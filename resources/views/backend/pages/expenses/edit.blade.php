@@ -1,10 +1,28 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Edit Expense || </title>
+    <title>Edit Expense || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
-   
+    <style>
+        .err {
+            font-size: 83%;
+            color: #f32f53;
+            font-weight: 600 !important;
+            margin-top: 7px !important;
+        }
+        .dateIcon {
+            position: absolute;
+            right: -2px;
+            top: -0.5px;
+            z-index: 0;
+        }
+        .dateBox {
+            position: relative;
+        }
+    </style>
+    <link href="{{asset('backend/libs/bootstrap-datepicker/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+    <link href="{{asset('backend/libs/select2/css/select2.min.css')}}" rel="stylesheet">
 @endsection
 
 @section('body-content')
@@ -41,41 +59,49 @@
                                     @csrf
                                     @method('PUT')
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="amn" class="form-label">Expense Amount</label>
-                                                <input type="text" class="form-control" id="amn" placeholder="Expense Amount" name="amn" required>
+                                                <input type="text" class="form-control" id="amn" placeholder="Expense Amount" name="amn" value="{{$editData->amn}}" required>
                                                 <div class="invalid-feedback"></div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
                                                 <label for="month" class="form-label">Month</label>
                                                 <select name="month" class="form-control select2" id="month" required>
                                                     <option value="">Please select month</option>
-                                                    <option value="1">January</option>
-                                                    <option value="2">February</option>
-                                                    <option value="3">March</option>
-                                                    <option value="4">April</option>
-                                                    <option value="5">May</option>
-                                                    <option value="6">June</option>
-                                                    <option value="7">July</option>
-                                                    <option value="8">August</option>
-                                                    <option value="9">September</option>
-                                                    <option value="10">October</option>
-                                                    <option value="11">November</option>
-                                                    <option value="12">December</option>
+                                                    <option value="1" {{($editData->month == 1) ? "selected" : ""}} >January</option>
+                                                    <option value="2" {{($editData->month == 2) ? "selected" : ""}}>February</option>
+                                                    <option value="3" {{($editData->month == 3) ? "selected" : ""}}>March</option>
+                                                    <option value="4" {{($editData->month == 4) ? "selected" : ""}}>April</option>
+                                                    <option value="5" {{($editData->month == 5) ? "selected" : ""}}>May</option>
+                                                    <option value="6" {{($editData->month == 6) ? "selected" : ""}}>June</option>
+                                                    <option value="7" {{($editData->month == 7) ? "selected" : ""}}>July</option>
+                                                    <option value="8" {{($editData->month == 8) ? "selected" : ""}}>August</option>
+                                                    <option value="9" {{($editData->month == 9) ? "selected" : ""}}>September</option>
+                                                    <option value="10" {{($editData->month == 10) ? "selected" : ""}}>October</option>
+                                                    <option value="11" {{($editData->month == 11) ? "selected" : ""}}>November</option>
+                                                    <option value="12" {{($editData->month == 12) ? "selected" : ""}}>December</option>
                                                 </select>
                                                 <div id="month_error" class="err"></div>
                                             </div>
                                         </div>
 
-                                        <div class="col-md-4">
+                                        <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label for="date" class="form-label">Expense Date</label>
+                                                <label for="year" class="form-label">Year</label>
+                                                <input type="text" class="form-control" id="year" placeholder="Expense Year" name="year" value="{{$editData->year}}" required>
+                                                <div class="invalid-feedback"></div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-3">
+                                            <div class="mb-3">
+                                                <label for="date" class="form-label" value="{{$editData->date}}">Expense Date</label>
                                                 <div class="input-group" id="datepicker1">
                                                     <input type="text" class="form-control" placeholder="dd M, yyyy"
-                                                        data-date-format="dd M, yyyy" data-date-container='#datepicker1' data-provide="datepicker" name="date" required>
+                                                        data-date-format="dd M, yyyy" data-date-container='#datepicker1' data-provide="datepicker" name="date" required value="{{$editData->date}}">
                                                     <span class="input-group-text"><i class="mdi mdi-calendar"></i></span>
                                                 </div>
                                                 <div id="e_date_error" class="err"></div>
@@ -87,7 +113,7 @@
                                         <div class="col-md-12">
                                             <div class="mb-3">
                                                 <label for="vo" class="form-label">Write Details</label>
-                                                <textarea id="elm1" placeholder="Write Details.." name="details"></textarea>
+                                                <textarea id="elm1" placeholder="Write Details.." name="details">{{$editData->details}}</textarea>
                                             </div>
                                         </div>
                                     </div>
@@ -114,6 +140,15 @@
     <script src="{{asset('backend/js/pages/form-validation.init.js')}}"></script>
     <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
+     {{-- data picker --}}
+     <script src="{{asset('backend/libs/bootstrap-datepicker/js/bootstrap-datepicker.min.js')}}"></script>
+     {{-- select box --}}
+     <script src="{{asset('backend/libs/select2/js/select2.min.js')}}"></script>
+     <script src="{{asset('backend/js/pages/form-advanced.init.js')}}"></script>
+    {{-- form editor --}}
+    <script src="{{asset('backend/js/pages/form-editor.init.js')}}"></script>
+    <script src="{{asset('backend/libs/tinymce/tinymce.min.js')}}"></script>
+
     {{-- send employess data --}}
     <script>
         $(document).ready(function() {
@@ -138,19 +173,11 @@
                         $("#addCustomer").prop('disabled', false).html(`
                             Save Changes
                         `);
-                        $('.needs-validation')[0].reset();
                         $('.needs-validation').find('.form-control').removeClass('form-control');
-
-                        //update form data
-                        $('#validationName').val(response.editData.name);
-                        $('#validationEamil').val(response.editData.email);
-                        $('#phone').val(response.editData.phone);
-                        $('#address').val(response.editData.address);
-                        $('#shop').val(response.editData.shop_name);
-                        $('#city').val(response.editData.city);
-                        $('#bank').val(response.editData.bank_account);
-                        $('#bankn').val(response.editData.bank_name);
-                        $('#vo').val(response.editData.vocation);
+                        $('#datepicker1').addClass('boxIcon');
+                         $('#datepicker1 .input-group-text').addClass('dateIcon');
+                         $('#month_error').html('');
+                         $('#e_date_error').html('');
 
                         // Display SweetAlert popup
                         Swal.fire({
@@ -164,18 +191,22 @@
                         // Reset Bootstrap validation state
                         form.find('.form-control').removeClass('is-invalid');
                         form.find('.invalid-feedback').html('');
-                        $("#addCustomer").prop('disabled', false).html(`
-                            Add Customer
-                        `);
+                        $("#addCustomer").prop('disabled', false).html(' Add Expense');
                         
                         // Handle validation errors
                         var errors = xhr.responseJSON.errors;
-                        console.log(errors)
+                        console.log(errors);
                         $.each(errors, function(key, value) {
                             var input = form.find('[name="' + key + '"]');
                             input.addClass('is-invalid');
                             input.addClass('form-control');
-                            input.next('.invalid-feedback').html(value); 
+                            if (key === 'month') {
+                                $('#month_error').html(value);
+                            }else if (key === 'date') {
+                                $('#e_date_error').html(value);
+                            } else {
+                                input.next('.invalid-feedback').html(value);
+                            }
                         });
                     }
                 });
@@ -188,95 +219,6 @@
                 input.next('.invalid-feedback').html('');
             });
         });
-    </script>
-
-    {{-- drag & drop --}}
-    <script>
-        function imgUpload() {
-            let dragArea = document.querySelector('.AppBody');
-            let dragText = document.querySelector('.drag');
-            let btn = document.querySelector('#browseFile');
-            let input = document.querySelector('.picture');
-            let file;
-
-            btn.onclick = () => {
-                input.click();
-            }
-
-            input.addEventListener('change', function () {
-                file = this.files[0];
-                show();
-            })
-
-            dragArea.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                dragText.innerText = "Release to Upload File";
-                dragArea.classList.add('active');
-            })
-
-            dragArea.addEventListener('dragleave', (event) => {
-                dragText.innerText = "Drag & Drop";
-                dragArea.classList.remove('active');
-            })
-
-            dragArea.addEventListener('drop', (event) => {
-                event.preventDefault();
-                file = event.dataTransfer.files[0];
-                input.files = event.dataTransfer.files; // Set files to input
-                show();
-            })
-
-            function show() {
-                let fileType = file.type;
-                let validType = ['image/jpeg', 'image/jpg', 'image/png'];
-
-                if (validType.includes(fileType)) {
-                    let fileRead = new FileReader();
-                    fileRead.onload = () => {
-                        let imgUrl = fileRead.result;
-                        let img = `<img src="${imgUrl}">`;
-                        let cancelButton = `<div class="cancell">
-                                                ❌
-                                            </div>`;
-                        // Create a new div for the uploaded image and cancel button
-                        let imageContainer = document.createElement('div');
-                        imageContainer.classList.add('image-container');
-                        imageContainer.innerHTML = img + cancelButton;
-
-                        // Check if an image is already uploaded
-                        let existingImageContainer = dragArea.querySelector('.image-container');
-                        if (existingImageContainer) {
-                            // Remove the existing image container
-                            dragArea.removeChild(existingImageContainer);
-                        }
-                        dragArea.appendChild(imageContainer);
-
-                        // Add event listener to the cancel button
-                        let cancelButtonElement = imageContainer.querySelector('.cancell');
-                        cancelButtonElement.addEventListener('click', function () {
-                            // Clear the input file and remove the image container
-                            input.value = null;
-                            dragArea.classList.remove('active');
-                            dragText.innerText = "Drag & Drop";
-                            dragArea.removeChild(imageContainer);
-                        });
-                    }
-                    fileRead.readAsDataURL(file);
-                } else {
-                    alert('This file is not valid');
-                    dragArea.classList.remove('active');
-                    dragText.innerText = "Drag & Drop";
-                }
-            }
-                $('#editCan').on('click', function(){
-                $('#editImg').remove();
-                $('#hasRemove').val(1)
-                $(this).remove();
-                imgUpload();
-            })
-        }
-
-        imgUpload();
     </script>
 
 @endsection

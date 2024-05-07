@@ -10,6 +10,10 @@ use App\Http\Controllers\AdminController\AdvSalaryController;
 use App\Http\Controllers\AdminController\CategoryController;
 use App\Http\Controllers\AdminController\ProductController;
 use App\Http\Controllers\AdminController\ExpenseController;
+use App\Http\Controllers\AdminController\AttendanceController;
+use App\Http\Controllers\AdminController\SettingController;
+use App\Http\Controllers\AdminController\PosController;
+use App\Http\Controllers\AdminController\OrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -102,7 +106,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function(){
             Route::get('/add', 'create')->name('add.category');
             Route::post('/store', 'store')->name('store.category');
             Route::get('/edit/{id}', 'edit')->name('edit.category');
-            Route::get('/show/{id}', 'show')->name('show.category');
+            Route::get('/show/{name}', 'show')->name('show.category');
             Route::put('/update/{id}', 'update')->name('update.category');
             Route::put('/update-status/{id}', 'activeStatus')->name('update.status.category');
             Route::delete('/delete/{id}', 'destroy')->name('delete.category');
@@ -120,6 +124,11 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function(){
             Route::put('/update/{id}', 'update')->name('update.product');
             Route::put('/update-status/{id}', 'activeStatus')->name('update.status.product');
             Route::delete('/delete/{id}', 'destroy')->name('delete.product');
+
+            // import & export
+            Route::get('/import-product', 'import_product')->name('import.product');
+            Route::get('/export-product', 'export_product')->name('export.product');
+            Route::post('/import-xlsx', 'import_xlsx')->name('import.xlsx');
         });
     });
 
@@ -128,11 +137,65 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function(){
         Route::group(['prefix' => '/expenses',], function(){
             Route::get('/manage', 'manage')->name('manage.expenses');
             Route::get('/add', 'create')->name('add.expenses');
+            Route::get('/today', 'today')->name('today.expenses');
+            Route::get('/month', 'month')->name('month.expenses');
+            Route::get('/year', 'year')->name('year.expenses');
             Route::post('/store', 'store')->name('store.expenses');
             Route::get('/edit/{id}', 'edit')->name('edit.expenses');
             Route::get('/show/{slug}', 'show')->name('show.expenses');
             Route::put('/update/{id}', 'update')->name('update.expenses');
             Route::delete('/delete/{id}', 'destroy')->name('delete.expenses');
+
+            // others monthly expenses
+            Route::get('/monthly-expenses/{month}', 'monthlyExpenses')->name('monthly.expenses');
+            Route::get('/monthly-day-expenses', 'monthlyDayExpenses')->name('monthly.day.expenses');
         });
     });
+
+    // Attendance
+    Route::controller(AttendanceController::class)->group(function(){
+        Route::group(['prefix' => '/attendence',], function(){
+            Route::get('/manage', 'manage')->name('manage.attendance');
+            Route::get('/add', 'take')->name('take.attendance');
+            Route::post('/store', 'store')->name('store.attendance');
+            Route::get('/edit/{edit_date}', 'edit')->name('edit.attendance');
+            Route::get('/month-attendance', 'month_attendance')->name('month.attendance');
+            Route::get('/monthly-attendances/{month}', 'monthly_attendance')->name('monthly.attendance');
+            Route::put('/update/{edit_date}', 'update')->name('update.attendance');
+            Route::delete('/delete/{id}', 'destroy')->name('delete.attendance');
+        });
+    });
+
+    // settings
+    Route::controller(SettingController::class)->group(function(){
+        Route::group(['prefix' => '/settings',], function(){
+            Route::get('/manage', 'manage')->name('manage.settings');
+            Route::post('/update', 'update')->name('update.settings');
+        });
+    });
+
+    // Pos
+    Route::controller(PosController::class)->group(function(){
+        Route::group(['prefix' => '/pos',], function(){
+            Route::get('/manage', 'manage')->name('manage.pos');
+            // cart
+            Route::post('/add-cart', 'add_cart')->name('add.cart');
+            Route::post('/update-cart/{id}', 'update_cart')->name('update.cart');
+            Route::delete('/del-cart/{id}', 'del_cart')->name('del.cart');
+            // order
+            Route::post('/place-order', 'place_order')->name('place.order');
+        });
+    });
+
+     // order
+     Route::controller(OrderController::class)->group(function(){
+        Route::group(['prefix' => '/order',], function(){
+            Route::get('/manage', 'manage')->name('manage.order');
+            Route::get('/details/{id}', 'show')->name('details.order');
+            Route::delete('/delete/{id}', 'destroy')->name('destroy.order');
+            Route::post('/update/{id}', 'update')->name('update.status');
+            Route::get('/order-invoice/{id}', 'order_invoice')->name('order.invoice');
+        });
+    });
+
 });

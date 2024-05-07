@@ -27,6 +27,13 @@
 
                 <li class="menu-title">Workforce Management</li>
                 <li>
+                    <a href="{{route('manage.pos')}}" class="waves-effect">
+                        <i class="ri-calculator-line"></i>
+                        <span>POS</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="javascript: void(0);" class="has-arrow waves-effect">
                         <i class="dripicons-user-group"></i>
                         <span>Employees</span>
@@ -34,6 +41,17 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('add.employees')}}"> <i class="ri-arrow-right-s-fill"></i> Add New</a></li>
                         <li><a href="{{route('manage.employees')}}"><i class="ri-arrow-right-s-fill"></i> Show All</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-user-unfollow-line"></i>
+                        <span>Attendance</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('take.attendance')}}"> <i class="ri-arrow-right-s-fill"></i> Take Attendence </a></li>
+                        <li><a href="{{route('manage.attendance')}}"><i class="ri-arrow-right-s-fill"></i> All Attendences</a></li>
+                        <li><a href="{{route('month.attendance')}}"><i class="ri-arrow-right-s-fill"></i> Monthly Attendences</a></li>
                     </ul>
                 </li>
                 <li>
@@ -79,7 +97,7 @@
                         <span>Expenses</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="{{route('add.expenses')}}"> <i class="ri-arrow-right-s-fill"></i> Add Expenses</a></li>
+                        <li><a href="{{route('add.expenses')}}"> <i class="ri-arrow-right-s-fill"></i> Add Expense</a></li>
                         <li><a href="{{route('manage.expenses')}}"><i class="ri-arrow-right-s-fill"></i> All Expenses</a></li>
                     </ul>
                 </li>
@@ -104,9 +122,28 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="{{route('add.product')}}"> <i class="ri-arrow-right-s-fill"></i> Add New Product </a></li>
                         <li><a href="{{route('manage.product')}}"><i class="ri-arrow-right-s-fill"></i> All Products</a></li>
+                        <li><a href="{{route('import.product')}}"><i class="ri-arrow-right-s-fill"></i> Import & Export Product </a></li>
                     </ul>
                 </li>
 
+                <li class="menu-title">Order Management</li>
+                <li>
+                    <a href="{{route('manage.order')}}" class=" waves-effect">
+                        <i class=" ri-gift-2-fill"></i>
+                        <span>All Order List</span>
+                    </a>
+                </li>
+
+                <li class="menu-title">PLATFORM SETTINGS</li>
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow waves-effect">
+                        <i class="ri-settings-2-line align-middle me-1"></i>
+                        <span>Settings</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="{{route('manage.settings')}}"> <i class="ri-arrow-right-s-fill"></i> Genarel Settings </a></li>
+                    </ul>
+                </li>
 
             </ul>
         </div>

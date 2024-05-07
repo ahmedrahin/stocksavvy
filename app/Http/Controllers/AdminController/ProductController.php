@@ -11,6 +11,10 @@ use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
 use Illuminate\Validation\Rule;
 use Illuminate\support\Str;
+use App\Exports\ProductExport;
+use App\Imports\ProductImport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 use File;
 
 class ProductController extends Controller
@@ -202,5 +206,27 @@ class ProductController extends Controller
         } else {
             return response()->json(['error' => 'Product not found.'], 404);
         }
+    }
+
+    // import and export
+    function import_product(){
+        return view('backend.pages.product.import_product');
+    }
+
+    public function export_product() 
+    {
+        return Excel::download(new ProductExport, 'products.xlsx');
+    }
+
+    public function import_xlsx(Request $request) 
+    {
+        // validaiton 
+        $request->validate([
+            'import_file' => 'required'
+        ],[
+            'import_file.required' => 'Please choose an xlsx file' 
+        ]);
+
+        Excel::import(new ProductImport, $request->file('import_file'));
     }
 }

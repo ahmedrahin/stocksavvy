@@ -1,5 +1,11 @@
-<!-- App favicon -->
-<link rel="shortcut icon" href="{{ asset('backend/images/favicon.ico') }}">
+<!--favicon-->
+@php
+    $favIcon = \App\Models\Settings::shop_fav();
+@endphp
+@if(!is_null($favIcon))
+    <link rel="icon" href="{{ asset($favIcon->fav_icon) }}" type="image/png" />
+@endif
+
 <!-- jquery.vectormap css -->
 <link href="{{ asset('backend/libs/admin-resources/jquery.vectormap/jquery-jvectormap-1.2.2.css') }}" rel="stylesheet" type="text/css" />
 <!-- Bootstrap Css -->

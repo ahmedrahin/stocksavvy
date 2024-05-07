@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('amn');
             $table->string('month');
             $table->string('date');
+            $table->string('year');
             $table->timestamps();
         });
     }

@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>{{ $showData->name }} Information || </title>
+    <title>Category - {{ $showData->cat_name }} || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
@@ -27,6 +27,18 @@
         .edit-item a i {
             padding-right: 7px;
         }
+
+        .product .card-body {
+            background: #EFF3F6;
+        }
+        .card-text {
+            color: #818181 !important;
+        }
+        .card-body h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #2c2c2c;
+        }
     </style>
 @endsection
 
@@ -44,7 +56,8 @@
                         <div class="page-title">
                             <ol class="breadcrumb m-0">
                                 <li class="breadcrumb-item"><a href="{{url('/')}}">Stock Savvy</a></li>
-                                <li class="breadcrumb-item active">{{ $showData->name }} Information</li>
+                                <li class="breadcrumb-item"><a href="{{url('/admin/categories/manage')}}">All Category</a></li>
+                                <li class="breadcrumb-item active">{{ $showData->cat_name }}</li>
                             </ol>
                         </div>
 
@@ -59,80 +72,30 @@
                         <div class="card-body">
                             <div class="edit-item">
                                 <h4 class="card-title">
-                                    {{ $showData->name }} Information
+                                    {{ $showData->cat_name }} - {{$products->count()}} Product found
                                 </h4>
-                                <a href="{{route('edit.customer', $showData->id)}}" class="btn btn-primary"> <i class=" ri-edit-box-line"></i> Edit Supplier</a>
+                                <a href="{{route('edit.category', $showData->id)}}" class="btn btn-primary"> <i class=" ri-edit-box-line"></i> Edit Category</a>
                             </div>
                             
-                            <div class="row mb-3">
-                                <label for="example-text-input" class="col-sm-2 col-form-label">Customer Name</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->name }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-search-input" class="col-sm-2 col-form-label">Customer Email</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->email }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-email-input" class="col-sm-2 col-form-label">Phone No.</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->phone }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-url-input" class="col-sm-2 col-form-label">Address</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->address }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-tel-input" class="col-sm-2 col-form-label">Bank Name</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->bank_name }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-password-input" class="col-sm-2 col-form-label">Bank Account</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->bank_account }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-number-input" class="col-sm-2 col-form-label">City / State</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->city }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-datetime-local-input" class="col-sm-2 col-form-label">Account Holder</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->account_holder }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-datetime-local-input" class="col-sm-2 col-form-label">Type</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ $showData->type }}" readonly>
-                                </div>
-                            </div>
-                            <!-- end row -->
-                            <div class="row mb-3">
-                                <label for="example-date-input" class="col-sm-2 col-form-label">Join Date</label>
-                                <div class="col-sm-10">
-                                    <input class="form-control" type="text" value="{{ \Carbon\Carbon::parse($showData->created_at)->format('d-M-Y') }}" readonly>
-
-                                </div>
+                            <div class="row product">
+                                @foreach( $products as $product )
+                                    <div class="col-md-6 col-xl-3">
+                                        <a href="{{route('show.product', $product->slug)}}" >
+                                            <div class="card">
+                                                @if( !is_null($product->image) )
+                                                    <img class="card-img-top img-fluid" src="{{asset($product->image)}}">
+                                                @else
+                                                    <img class="card-img-top img-fluid" src="{{asset('backend/images/default.jpg')}}">
+                                                @endif
+                                                <div class="card-body">
+                                                    <p class="card-text">
+                                                        <h4>{{$product->title}}</h4>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endforeach
                             </div>
 
                         </div>

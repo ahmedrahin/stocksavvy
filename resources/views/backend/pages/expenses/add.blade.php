@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Add Expense || </title>
+    <title>Add Expense || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
@@ -57,35 +57,42 @@
                             <form action="{{route('store.expenses')}}" method="POST" class="needs-validation"  novalidate>
                                 @csrf
                                 <div class="row">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="amn" class="form-label">Expense Amount</label>
                                             <input type="text" class="form-control" id="amn" placeholder="Expense Amount" name="amn" required>
                                             <div class="invalid-feedback"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="month" class="form-label">Month</label>
                                             <select name="month" class="form-control select2" id="month" required>
                                                 <option value="">Please select month</option>
-                                                <option value="1">January</option>
-                                                <option value="2">February</option>
-                                                <option value="3">March</option>
-                                                <option value="4">April</option>
-                                                <option value="5">May</option>
-                                                <option value="6">June</option>
-                                                <option value="7">July</option>
-                                                <option value="8">August</option>
-                                                <option value="9">September</option>
-                                                <option value="10">October</option>
-                                                <option value="11">November</option>
-                                                <option value="12">December</option>
+                                                <option value="1" {{(date('n') == 1) ? "selected" : ''}}>January</option>
+                                                <option value="2" {{(date('n') == 2) ? "selected" : ''}}>February</option>
+                                                <option value="3" {{(date('n') == 3) ? "selected" : ''}}>March</option>
+                                                <option value="4" {{(date('n') == 4) ? "selected" : ''}}>April</option>
+                                                <option value="5" {{(date('n') == 5) ? "selected" : ''}}>May</option>
+                                                <option value="6" {{(date('n') == 6) ? "selected" : ''}}>June</option>
+                                                <option value="7" {{(date('n') == 7) ? "selected" : ''}}>July</option>
+                                                <option value="8" {{(date('n') == 8) ? "selected" : ''}}>August</option>
+                                                <option value="9" {{(date('n') == 9) ? "selected" : ''}}>September</option>
+                                                <option value="10" {{(date('n') == 10) ? "selected" : ''}}>October</option>
+                                                <option value="11" {{(date('n') == 11) ? "selected" : ''}}>November</option>
+                                                <option value="12" {{(date('n') == 12) ? "selected" : ''}}>December</option>
                                             </select>
                                             <div id="month_error" class="err"></div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <div class="mb-3">
+                                            <label for="year" class="form-label">Year</label>
+                                            <input type="text" class="form-control" id="year" placeholder="Expense Year" name="year" value="{{date('Y')}}" required>
+                                            <div class="invalid-feedback"></div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="mb-3">
                                             <label for="date" class="form-label">Expense Date</label>
                                             <div class="input-group" id="datepicker1">
@@ -136,7 +143,7 @@
     {{-- form editor --}}
     <script src="{{asset('backend/js/pages/form-editor.init.js')}}"></script>
     <script src="{{asset('backend/libs/tinymce/tinymce.min.js')}}"></script>
-     {{-- send salary data --}}
+     {{-- send expencs data --}}
      <script>
           $(document).ready(function() {
              $('.needs-validation').submit(function(event) {

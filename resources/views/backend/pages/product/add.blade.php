@@ -1,10 +1,15 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Add Product || </title>
+    <title>Add Product || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
     <style>
+        .card-title {
+            display: flex !important;
+            align-items: center;
+            justify-content: space-between;
+        }
         #ex_date {
             font-size: 83%;
             color: #f32f53;
@@ -120,7 +125,10 @@
                 <div class="col-xl-12">
                     <div class="card">
                         <div class="card-body">
-                            <h4 class="card-title">Add New Product</h4>
+                            <h4 class="card-title">
+                                Add New Product
+                                <a href="{{route('import.product')}}" class="btn btn-primary">Import Product</a>
+                            </h4>
 
                             <form action="{{route('store.product')}}" method="POST" class="needs-validation"  novalidate enctype="multipart/form-data">
                                 @csrf

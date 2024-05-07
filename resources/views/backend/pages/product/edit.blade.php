@@ -1,6 +1,6 @@
 @extends('backend.layout.template')
 @section('page-title')
-    <title>Edit Product || </title>
+    <title>Edit Product || {{ !is_null($siteTitle = App\Models\Settings::site_title()) ? $siteTitle->company_name : '' }}</title>
 @endsection
 
 @section('page-css')
@@ -139,9 +139,11 @@
                                                 <label for="category" class="form-label">Category</label>
                                                 <select name="category" class="form-control select2-multiple select2" multiple="multiple" id="category" data-placeholder="Select a category" required>
                                                     <option value="">Select a category</option>
-                                                    @foreach ($categories as $category)
-                                                        <option value="{{$category->id}}" {{($editData->cat_id == $category->id) ? 'selected' : ''}}>{{$category->cat_name}}</option>
-                                                    @endforeach
+                                                    @if( isset($categories) )
+                                                        @foreach ($categories as $category)
+                                                            <option value="{{$category->id}}" {{($editData->cat_id == $category->id) ? 'selected' : ''}}>{{$category->cat_name}}</option>
+                                                        @endforeach
+                                                    @endif
                                                 </select>
                                                 <div class="invalid-feedback" id="category-error"></div>
                                             </div>
@@ -151,7 +153,7 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="mb-3">
-                                                <label for="sup" class="form-label" {{($editData->cat_id == $category->id) ? 'selected' : ''}}>Supplier Name</label>
+                                                <label for="sup" class="form-label">Supplier Name</label>
                                                 <select name="sup" class="form-control select2" id="sup">
                                                     <option value="">Select supplier name</option>
                                                     @foreach ($suplliers as $supllier)

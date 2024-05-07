@@ -5,6 +5,8 @@ namespace App\Http\Controllers\AdminController;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Product;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -32,7 +34,7 @@ class CategoryController extends Controller
     {
         // validation
         $request->validate([
-            "name" => "required",
+            'name' => 'required|unique:categories,cat_name',
         ],[
             "name.required" => "The category name is required."
         ]);
@@ -48,9 +50,14 @@ class CategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $name)
     {
-        //
+        $theCat = str_replace('_', ' ',  $name);
+        $showData   = Category::where('cat_name', strtoupper($theCat))->first();
+        
+        // product
+        $products = Product::where('cat_id', $showData->id)->get();
+        return view('backend.pages.category.show', compact('showData', 'products'));
     }
 
     /**
@@ -73,8 +80,10 @@ class CategoryController extends Controller
 
         // validation
         $request->validate([
-            "name" => "required",
-        ],);
+            'name' => ['required', Rule::unique('categories', 'cat_name')->ignore($id)],
+        ],[
+            "name.required" => "The category name is required."
+        ]);
 
         $update->cat_name     = $request->name;
         $update->status       = $request->status;

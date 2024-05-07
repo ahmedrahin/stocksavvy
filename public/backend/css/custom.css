@@ -1,9 +1,22 @@
 .auth-body-bg .bg-overlay {
-    background: #000000f7 !important;
+    background: #000000 !important;
+    opacity: .8 !important;
 }
 .sub-menu i {
     min-width: inherit !important;
     padding: 0 !important;
+}
+.auth-body-bg .card{
+    background: #373737b3 !important;
+}
+.auth-body-bg .text-muted {
+    color: white !important;
+}
+.auth-body-bg .card-body {
+    background: transparent;
+}
+.auth-body-bg label {
+    color: #ffffffcc;
 }
 #sidebar-menu ul li ul.sub-menu li a {
     padding-left: 42px !important;
